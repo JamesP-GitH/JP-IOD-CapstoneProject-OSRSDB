@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
+const { Schema } = mongoose;
 
 // Weapon stance  schema
 const weaponStanceSchema = new Schema(
@@ -58,4 +58,5 @@ const itemSchema = new Schema(
     { strict: false }
 );
 
-module.exports = mongoose.model("weapon", itemSchema);
+const Weapon = mongoose.models.Weapon || mongoose.model("weapon", itemSchema);
+export default Weapon;

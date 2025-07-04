@@ -1,14 +1,13 @@
-"use strict";
-module.exports = {
-    Weapon: require("./weapon"),
-    Shield: require("./shield"),
-    Head: require("./head"),
-    Hand: require("./hand"),
-    Body: require("./body"),
-    Cape: require("./cape"),
-    Ammo: require("./ammo"),
-    Feet: require("./feet"),
-    Leg: require("./leg"),
-    Neck: require("./neck"),
-    Ring: require("./ring"),
-};
+import Weapon from "./weapon";
+import Shield from "./shield";
+import Head from "./head";
+import Hand from "./hand";
+import Body from "./body";
+import Cape from "./cape";
+import Ammo from "./ammo";
+import Feet from "./feet";
+import Leg from "./leg";
+import Neck from "./neck";
+import Ring from "./ring";
+
+export { Weapon, Shield, Head, Hand, Body, Cape, Ammo, Feet, Leg, Neck, Ring };

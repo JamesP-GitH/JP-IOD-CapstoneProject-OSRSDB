@@ -1,130 +1,63 @@
-"use strict";
-let Models = require("../models");
+import { Weapon } from "@/models";
 
-// Get all weapon items
-const getAllWeapons = (req, res) => {
-    Models.Weapon.find({})
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getAllWeapons() {
+    return await Weapon.find({});
+}
 
-// Get a single weapon item by its ID
-const getWeaponById = (req, res) => {
-    Models.Weapon.findById(req.params.id)
-        .then((data) => {
-            if (!data) {
-                return res.status(404).json({ message: "Weapon not found" });
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getWeaponById(id) {
+    const weapon = await Weapon.findById(id);
+    if (!weapon) {
+        throw new Error("Weapon not found");
+    }
+    return weapon;
+}
 
-// Get weapon items by name 
-const getWeaponByName = (req, res) => {
-    Models.Weapon.find({ name: { $regex: req.params.name, $options: "i" } })
-        .then((data) => {
-            if (data.length === 0) {
-                return res.status(404).json({ message: "No weapons found matching that name" });
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getWeaponByName(name) {
+    const weapon = await Weapon.find({ name: { $regex: name, $options: "i" } });
+    if (weapon.length === 0) {
+        throw new Error("No weapons found matching that name");
+    }
+    return weapon;
+}
 
-// Get weapon items by weapon_type
-const getWeaponByType = (req, res) => {
-    const type = req.params.type;
-    Models.Weapon.find({ "weapon.weapon_type": type })
-        .then((data) => {
-            if (data.length === 0) {
-                return res.status(404).json({ message: "No weapons found matching that type" });
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getWeaponByType(type) {
+    const weapons = await Weapon.find({ "weapon.weapon_type": type });
+    if (weapons.length === 0) {
+        throw new Error("No weapons found matching that type");
+    }
+    return weapons;
+}
 
-// Get all unique weapon types
-const getAllWeaponTypes = (req, res) => {
-    Models.Weapon.distinct("weapon.weapon_type")
-        .then((types) => {
-            if (!types || types.length === 0) {
-                return res.status(404).json({ message: "No weapon types found" });
-            }
-            res.send({ result: 200, data: types });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getAllWeaponTypes() {
+    const types = await Weapon.distinct("weapon.weapon_type");
+    if (!types || types.length === 0) {
+        throw new Error("No weapon types found");
+    }
+    return types;
+}
+export async function getWeaponNames() {
+    const data = await Weapon.find({}, { name: 1, _id: 0 });
+    const names = data.map((item) => item.name);
+    return names;
+}
 
-// Get all weapon names only
-const getWeaponNames = (req, res) => {
-    Models.Weapon.find({}, { name: 1, _id: 0 })
-        .then((data) => {
-            const names = data.map((item) => item.name);
-            res.send({ result: 200, data: names });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function createWeapon(weaponData) {
+    const newWeapon = new Weapon(weaponData);
+    return await newWeapon.save();
+}
 
-// Create a new weapon item
-const createWeapon = (req, res) => {
-    const newWeapon = new Models.Weapon(req.body);
-    newWeapon
-        .save()
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function updateWeapon(id, weaponData) {
+    const updatedWeapon = await Weapon.findByIdAndUpdate(id, weaponData, { new: true });
+    if (!updatedWeapon) {
+        throw new Error("Weapon not found for update");
+    }
+    return updatedWeapon;
+}
 
-// Update an existing weapon item by ID
-const updateWeapon = (req, res) => {
-    Models.Weapon.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
-
-// Delete a weapon item by ID
-const deleteWeapon = (req, res) => {
-    Models.Weapon.findByIdAndDelete(req.params.id)
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
-
-module.exports = {
-    getAllWeapons,
-    getWeaponById,
-    getWeaponByName,
-    getWeaponByType,
-    getAllWeaponTypes,
-    getWeaponNames,
-    createWeapon,
-    updateWeapon,
-    deleteWeapon,
-};
+export async function deleteWeapon(id) {
+    const deletedWeapon = await Weapon.findByIdAndDelete(id);
+    if (!deletedWeapon) {
+        throw new Error("Weapon not found for deletion");
+    }
+    return deletedWeapon;
+}
