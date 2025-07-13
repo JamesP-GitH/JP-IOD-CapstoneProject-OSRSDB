@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
+const { Schema } = mongoose;
 
 const equipmentSchema = new Schema(
     {
@@ -35,4 +35,5 @@ const feetSchema = new Schema(
     { strict: false }
 );
 
-module.exports = mongoose.model("feet", feetSchema);
+const Feet = mongoose.models.Feet || mongoose.model("feet", feetSchema);
+export default Feet;

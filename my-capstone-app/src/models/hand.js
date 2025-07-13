@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
+const { Schema } = mongoose;
 
 const equipmentSchema = new Schema(
     {
@@ -35,4 +35,5 @@ const handSchema = new Schema(
     { strict: false }
 );
 
-module.exports = mongoose.model("hand", handSchema);
+const Hand = mongoose.models.Hand || mongoose.model("hand", handSchema);
+export default Hand;

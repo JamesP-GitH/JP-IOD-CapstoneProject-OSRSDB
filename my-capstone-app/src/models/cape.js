@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
+const { Schema } = mongoose;
 
 const equipmentSchema = new Schema(
     {
@@ -35,4 +35,5 @@ const capeSchema = new Schema(
     { strict: false }
 );
 
-module.exports = mongoose.model("cape", capeSchema);
+const Cape = mongoose.models.Cape || mongoose.model("cape", capeSchema);
+export default Cape;
