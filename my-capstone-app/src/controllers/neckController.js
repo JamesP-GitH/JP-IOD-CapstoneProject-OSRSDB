@@ -1,96 +1,48 @@
-"use strict";
-let Models = require("../models");
+import { Neck } from "@/models";
 
-// Get all neck items
-const getAllNecks = (req, res) => {
-    Models.Neck.find({})
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getAllNecks() {
+    return await Neck.find({});
+}
 
-// Get a single neck item by its ID
-const getNeckById = (req, res) => {
-    Models.Neck.findById(req.params.id)
-        .then((data) => {
-            if (!data) {
-                return res.status(404).send({ result: 404, message: "Neck not found" });
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
-// Get neck items by name
-const getNeckByName = (req, res) => {
-    Models.Neck.find({ name: { $regex: req.params.name, $options: "i" } })
-        .then((data) => {
-            if (data.length === 0) {
-                return res.status(404).json({ message: "No necks found matching that name" });
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getNeckById(id) {
+    const neck = await Neck.findById(id);
+    if (!neck) {
+        throw new Error("Neck not found");
+    }
+    return neck;
+}
 
-// Get all neck names only
-const getNeckNames = (req, res) => {
-    Models.Neck.find({}, { name: 1, _id: 0 })
-        .then((data) => {
-            const names = data.map((item) => item.name);
-            res.send({ result: 200, data: names });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getNeckByName(name) {
+    const necks = await Neck.find({ name: { $regex: name, $options: "i" } });
+    if (necks.length === 0) {
+        throw new Error("No neck items found matching that name");
+    }
+    return necks;
+}
 
-// Create a new neck item
-const createNeck = (req, res) => {
-    const newNeck = new Models.Neck(req.body);
-    newNeck
-        .save()
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getNeckNames() {
+    const data = await Neck.find({}, { name: 1, _id: 0 });
+    const names = data.map((item) => item.name);
+    return names;
+}
 
-// Update an existing neck item by ID
-const updateNeck = (req, res) => {
-    Models.Neck.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function createNeck(neckData) {
+    const newNeck = new Neck(neckData);
+    return await newNeck.save();
+}
 
-// Delete a neck item by ID
-const deleteNeck = (req, res) => {
-    Models.Neck.findByIdAndDelete(req.params.id)
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function updateNeck(id, neckData) {
+    const updatedNeck = await Neck.findByIdAndUpdate(id, neckData, { new: true });
+    if (!updatedNeck) {
+        throw new Error("Neck not found for update");
+    }
+    return updatedNeck;
+}
 
-module.exports = {
-    getAllNecks,
-    getNeckById,
-    getNeckByName,
-    getNeckNames,
-    createNeck,
-    updateNeck,
-    deleteNeck,
-};
+export async function deleteNeck(id) {
+    const deletedNeck = await Neck.findByIdAndDelete(id);
+    if (!deletedNeck) {
+        throw new Error("Neck not found for deletion");
+    }
+    return deletedNeck;
+}
