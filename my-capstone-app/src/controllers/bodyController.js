@@ -1,96 +1,48 @@
-"use strict";
-let Models = require("../models");
+import { Body } from "@/models";
 
-// Get all body items
-const getAllBodies = (req, res) => {
-    Models.Body.find({})
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getAllBodies() {
+    return await Body.find({});
+}
 
-// Get a single body item by its ID
-const getBodyById = (req, res) => {
-    Models.Body.findById(req.params.id)
-        .then((data) => {
-            if (!data) {
-                return res.status(404).send({ result: 404, message: "Body not found" });
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
-// Get body items by name
-const getBodyByName = (req, res) => {
-    Models.Body.find({ name: { $regex: req.params.name, $options: "i" } })
-        .then((data) => {
-            if (data.length === 0) {
-                return res.status(404).json({ message: "No bodies found matching that name" });
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getBodyById(id) {
+    const body = await Body.findById(id);
+    if (!body) {
+        throw new Error("Body not found");
+    }
+    return body;
+}
 
-// Get all body names only
-const getBodyNames = (req, res) => {
-    Models.Body.find({}, { name: 1, _id: 0 })
-        .then((data) => {
-            const names = data.map((item) => item.name);
-            res.send({ result: 200, data: names });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getBodyByName(name) {
+    const bodies = await Body.find({ name: { $regex: name, $options: "i" } });
+    if (bodies.length === 0) {
+        throw new Error("No body items found matching that name");
+    }
+    return bodies;
+}
 
-// Create a new body item
-const createBody = (req, res) => {
-    const newBody = new Models.Body(req.body);
-    newBody
-        .save()
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getBodyNames() {
+    const data = await Body.find({}, { name: 1, _id: 0 });
+    const names = data.map((item) => item.name);
+    return names;
+}
 
-// Update an existing body item by ID
-const updateBody = (req, res) => {
-    Models.Body.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function createBody(bodyData) {
+    const newBody = new Body(bodyData);
+    return await newBody.save();
+}
 
-// Delete a body item by ID
-const deleteBody = (req, res) => {
-    Models.Body.findByIdAndDelete(req.params.id)
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function updateBody(id, bodyData) {
+    const updatedBody = await Body.findByIdAndUpdate(id, bodyData, { new: true });
+    if (!updatedBody) {
+        throw new Error("Body not found for update");
+    }
+    return updatedBody;
+}
 
-module.exports = {
-    getAllBodies,
-    getBodyById,
-    getBodyByName,
-    getBodyNames,
-    createBody,
-    updateBody,
-    deleteBody,
-};
+export async function deleteBody(id) {
+    const deletedBody = await Body.findByIdAndDelete(id);
+    if (!deletedBody) {
+        throw new Error("Body not found for deletion");
+    }
+    return deletedBody;
+}
