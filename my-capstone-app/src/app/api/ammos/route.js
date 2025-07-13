@@ -21,6 +21,7 @@ export async function GET(req) {
         return Response.json({ error: "Failed to fetch ammo items" }, { status: 500 });
     }
 }
+
 export async function POST(req) {
     await dbConnect();
 
