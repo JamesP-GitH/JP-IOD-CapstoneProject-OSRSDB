@@ -1,97 +1,48 @@
-"use strict";
-let Models = require("../models");
+import { Feet } from "@/models";
 
-// Get all feet items
-const getAllFeets = (req, res) => {
-    Models.Feet.find({})
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getAllFeets() {
+    return await Feet.find({});
+}
 
-// Get a single feet item by its ID
-const getFeetById = (req, res) => {
-    Models.Feet.findById(req.params.id)
-        .then((data) => {
-            if (!data) {
-                return res.status(404).send({ result: 404, message: "Feet not found" });
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getFeetById(id) {
+    const feet = await Feet.findById(id);
+    if (!feet) {
+        throw new Error("Feet not found");
+    }
+    return feet;
+}
 
-// Get feet items by name
-const getFeetByName = (req, res) => {
-    Models.Feet.find({ name: { $regex: req.params.name, $options: "i" } })
-        .then((data) => {
-            if (data.length === 0) {
-                return res.status(404).json({ message: "No feets found matching that name" });
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getFeetByName(name) {
+    const feets = await Feet.find({ name: { $regex: name, $options: "i" } });
+    if (feets.length === 0) {
+        throw new Error("No feet items found matching that name");
+    }
+    return feets;
+}
 
-// Get all feet names only
-const getFeetNames = (req, res) => {
-    Models.Feet.find({}, { name: 1, _id: 0 })
-        .then((data) => {
-            const names = data.map((item) => item.name);
-            res.send({ result: 200, data: names });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getFeetNames() {
+    const data = await Feet.find({}, { name: 1, _id: 0 });
+    const names = data.map((item) => item.name);
+    return names;
+}
 
-// Create a new feet item
-const createFeet = (req, res) => {
-    const newFeet = new Models.Feet(req.body);
-    newFeet
-        .save()
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function createFeet(feetData) {
+    const newFeet = new Feet(feetData);
+    return await newFeet.save();
+}
 
-// Update an existing feet item by ID
-const updateFeet = (req, res) => {
-    Models.Feet.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function updateFeet(id, feetData) {
+    const updatedFeet = await Feet.findByIdAndUpdate(id, feetData, { new: true });
+    if (!updatedFeet) {
+        throw new Error("Feet not found for update");
+    }
+    return updatedFeet;
+}
 
-// Delete a feet item by ID
-const deleteFeet = (req, res) => {
-    Models.Feet.findByIdAndDelete(req.params.id)
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
-
-module.exports = {
-    getAllFeets,
-    getFeetById,
-    getFeetByName,
-    getFeetNames,
-    createFeet,
-    updateFeet,
-    deleteFeet,
-};
+export async function deleteFeet(id) {
+    const deletedFeet = await Feet.findByIdAndDelete(id);
+    if (!deletedFeet) {
+        throw new Error("Feet not found for deletion");
+    }
+    return deletedFeet;
+}
