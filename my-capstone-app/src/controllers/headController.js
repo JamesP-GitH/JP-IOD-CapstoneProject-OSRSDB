@@ -1,96 +1,48 @@
-"use strict";
-let Models = require("../models");
+import { Head } from "@/models";
 
-// Get all head items
-const getAllHeads = (req, res) => {
-    Models.Head.find({})
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getAllHeads() {
+    return await Head.find({});
+}
 
-// Get a single head item by its ID
-const getHeadById = (req, res) => {
-    Models.Head.findById(req.params.id)
-        .then((data) => {
-            if (!data) {
-                return res.status(404).send({ result: 404, message: "Head not found" });
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
-// Get head items by name
-const getHeadByName = (req, res) => {
-    Models.Head.find({ name: { $regex: req.params.name, $options: "i" } })
-        .then((data) => {
-            if (data.length === 0) {
-                return res.status(404).json({ message: "No heads found matching that name" });
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getHeadById(id) {
+    const head = await Head.findById(id);
+    if (!head) {
+        throw new Error("Head not found");
+    }
+    return head;
+}
 
-// Get all head names only
-const getHeadNames = (req, res) => {
-    Models.Head.find({}, { name: 1, _id: 0 })
-        .then((data) => {
-            const names = data.map((item) => item.name);
-            res.send({ result: 200, data: names });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getHeadByName(name) {
+    const heads = await Head.find({ name: { $regex: name, $options: "i" } });
+    if (heads.length === 0) {
+        throw new Error("No head items found matching that name");
+    }
+    return heads;
+}
 
-// Create a new head item
-const createHead = (req, res) => {
-    const newHead = new Models.Head(req.body);
-    newHead
-        .save()
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getHeadNames() {
+    const data = await Head.find({}, { name: 1, _id: 0 });
+    const names = data.map((item) => item.name);
+    return names;
+}
 
-// Update an existing head item by ID
-const updateHead = (req, res) => {
-    Models.Head.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function createHead(headData) {
+    const newHead = new Head(headData);
+    return await newHead.save();
+}
 
-// Delete a head item by ID
-const deleteHead = (req, res) => {
-    Models.Head.findByIdAndDelete(req.params.id)
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function updateHead(id, headData) {
+    const updatedHead = await Head.findByIdAndUpdate(id, headData, { new: true });
+    if (!updatedHead) {
+        throw new Error("Head not found for update");
+    }
+    return updatedHead;
+}
 
-module.exports = {
-    getAllHeads,
-    getHeadById,
-    getHeadByName,
-    getHeadNames,
-    createHead,
-    updateHead,
-    deleteHead,
-};
+export async function deleteHead(id) {
+    const deletedHead = await Head.findByIdAndDelete(id);
+    if (!deletedHead) {
+        throw new Error("Head not found for deletion");
+    }
+    return deletedHead;
+}
