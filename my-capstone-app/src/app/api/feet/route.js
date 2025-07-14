@@ -15,7 +15,7 @@ export async function GET(req) {
         if (name) {
             return Response.json(await feetController.getFeetByName(name), { status: 200 });
         }
-        return Response.json(await feetController.getAllFeet(), { status: 200 });
+        return Response.json(await feetController.getAllFeets(), { status: 200 });
     } catch (error) {
         console.error("Error fetching feet items:", error);
         return Response.json({ error: "Failed to fetch feet items" }, { status: 500 });
