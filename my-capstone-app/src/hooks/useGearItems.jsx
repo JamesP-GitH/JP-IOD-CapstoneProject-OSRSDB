@@ -27,33 +27,16 @@ function useGearItems(slot) {
     useEffect(() => {
         if (!slot) return;
 
-        const slotDataLocation = `/data/items-${slot}.json`;
         let ignore = false;
-
         dispatch({ type: "FETCH_START" });
 
         async function fetchData() {
             try {
-                let data = {};
-
-                if (slot === "weapon") {
-                    const [oneHanded, twoHanded] = await Promise.all([
-                        fetch("/data/items-weapon.json").then((res) => {
-                            if (!res.ok) throw new Error("Failed to load one-handed weapons");
-                            return res.json();
-                        }),
-                        fetch("/data/items-2h.json").then((res) => {
-                            if (!res.ok) throw new Error("Failed to load two-handed weapons");
-                            return res.json();
-                        }),
-                    ]);
-
-                    data = { ...oneHanded, ...twoHanded };
-                } else {
-                    const res = await fetch(`/data/items-${slot}.json`);
-                    if (!res.ok) throw new Error(`Failed to load ${slot}`);
-                    data = await res.json();
+                const response = await fetch(`/api/${slot}`);
+                if (!response.ok) {
+                    throw new Error(`Error fetching ${slot}: ${response.statusText}`);
                 }
+                const data = await response.json();
 
                 if (!ignore) {
                     dispatch({ type: "FETCH_SUCCESS", payload: data });
@@ -62,6 +45,7 @@ function useGearItems(slot) {
             } catch (error) {
                 if (!ignore) {
                     dispatch({ type: "FETCH_ERROR", payload: error.message });
+                    console.error(error.message);
                 }
             }
         }
@@ -72,6 +56,7 @@ function useGearItems(slot) {
             ignore = true;
         };
     }, [slot]);
+
     return state;
 }
 
