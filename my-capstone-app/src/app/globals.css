@@ -10,3 +10,17 @@ html {
 .no-spinner {
     -moz-appearance: textfield !important;
 }
+
+.item-link {
+    text-decoration: none;
+    transition: text-decoration 0.2s ease;
+}
+
+.item-link:hover {
+    text-decoration: underline;
+}
+
+body.modal-open {
+    overflow: hidden;
+    padding-right: 0 !important;
+}

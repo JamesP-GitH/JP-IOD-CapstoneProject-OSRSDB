@@ -1,97 +1,48 @@
-"use strict";
-let Models = require("../models");
+import { Cape } from "@/models";
 
-// Get all cape items
-const getAllCapes = (req, res) => {
-    Models.Cape.find({})
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getAllCapes() {
+    return await Cape.find({});
+}
 
-// Get a single cape item by its ID
-const getCapeById = (req, res) => {
-    Models.Cape.findById(req.params.id)
-        .then((data) => {
-            if (!data) {
-                return res.status(404).send({ result: 404, message: "Cape not found" });
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getCapeById(id) {
+    const cape = await Cape.findById(id);
+    if (!cape) {
+        throw new Error("Cape not found");
+    }
+    return cape;
+}
 
-// Get cape items by name
-const getCapeByName = (req, res) => {
-    Models.Cape.find({ name: { $regex: req.params.name, $options: "i" } })
-        .then((data) => {
-            if (data.length === 0) {
-                return res.status(404).json({ message: "No capes found matching that name" });
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getCapeByName(name) {
+    const capes = await Cape.find({ name: { $regex: name, $options: "i" } });
+    if (capes.length === 0) {
+        throw new Error("No cape items found matching that name");
+    }
+    return capes;
+}
 
-// Get all cape names only
-const getCapeNames = (req, res) => {
-    Models.Cape.find({}, { name: 1, _id: 0 })
-        .then((data) => {
-            const names = data.map((item) => item.name);
-            res.send({ result: 200, data: names });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getCapeNames() {
+    const data = await Cape.find({}, { name: 1, _id: 0 });
+    const names = data.map((item) => item.name);
+    return names;
+}
 
-// Create a new cape item
-const createCape = (req, res) => {
-    const newCape = new Models.Cape(req.body);
-    newCape
-        .save()
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function createCape(capeData) {
+    const newCape = new Cape(capeData);
+    return await newCape.save();
+}
 
-// Update an existing cape item by ID
-const updateCape = (req, res) => {
-    Models.Cape.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function updateCape(id, capeData) {
+    const updatedCape = await Cape.findByIdAndUpdate(id, capeData, { new: true });
+    if (!updatedCape) {
+        throw new Error("Cape not found for update");
+    }
+    return updatedCape;
+}
 
-// Delete a cape item by ID
-const deleteCape = (req, res) => {
-    Models.Cape.findByIdAndDelete(req.params.id)
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
-
-module.exports = {
-    getAllCapes,
-    getCapeById,
-    getCapeByName,
-    getCapeNames,
-    createCape,
-    updateCape,
-    deleteCape,
-};
+export async function deleteCape(id) {
+    const deletedCape = await Cape.findByIdAndDelete(id);
+    if (!deletedCape) {
+        throw new Error("Cape not found for deletion");
+    }
+    return deletedCape;
+}

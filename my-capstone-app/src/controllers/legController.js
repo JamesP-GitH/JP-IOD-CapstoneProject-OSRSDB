@@ -1,96 +1,48 @@
-"use strict";
-let Models = require("../models");
+import { Leg } from "@/models";
 
-// Get all leg items
-const getAllLegs = (req, res) => {
-    Models.Leg.find({})
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getAllLegs() {
+    return await Leg.find({});
+}
 
-// Get a single leg item by its ID
-const getLegById = (req, res) => {
-    Models.Leg.findById(req.params.id)
-        .then((data) => {
-            if (!data) {
-                return res.status(404).send({ result: 404, message: "Leg not found" });
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
-// Get leg items by name
-const getLegByName = (req, res) => {
-    Models.Leg.find({ name: { $regex: req.params.name, $options: "i" } })
-        .then((data) => {
-            if (data.length === 0) {
-                return res.status(404).json({ message: "No legs found matching that name" });
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getLegById(id) {
+    const leg = await Leg.findById(id);
+    if (!leg) {
+        throw new Error("Leg not found");
+    }
+    return leg;
+}
 
-// Get all leg names only
-const getLegNames = (req, res) => {
-    Models.Leg.find({}, { name: 1, _id: 0 })
-        .then((data) => {
-            const names = data.map((item) => item.name);
-            res.send({ result: 200, data: names });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getLegByName(name) {
+    const legs = await Leg.find({ name: { $regex: name, $options: "i" } });
+    if (legs.length === 0) {
+        throw new Error("No leg items found matching that name");
+    }
+    return legs;
+}
 
-// Create a new leg item
-const createLeg = (req, res) => {
-    const newLeg = new Models.Leg(req.body);
-    newLeg
-        .save()
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getLegNames() {
+    const data = await Leg.find({}, { name: 1, _id: 0 });
+    const names = data.map((item) => item.name);
+    return names;
+}
 
-// Update an existing leg item by ID
-const updateLeg = (req, res) => {
-    Models.Leg.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function createLeg(legData) {
+    const newLeg = new Leg(legData);
+    return await newLeg.save();
+}
 
-// Delete a leg item by ID
-const deleteLeg = (req, res) => {
-    Models.Leg.findByIdAndDelete(req.params.id)
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function updateLeg(id, legData) {
+    const updatedLeg = await Leg.findByIdAndUpdate(id, legData, { new: true });
+    if (!updatedLeg) {
+        throw new Error("Leg not found for update");
+    }
+    return updatedLeg;
+}
 
-module.exports = {
-    getAllLegs,
-    getLegById,
-    getLegByName,
-    getLegNames,
-    createLeg,
-    updateLeg,
-    deleteLeg,
-};
+export async function deleteLeg(id) {
+    const deletedLeg = await Leg.findByIdAndDelete(id);
+    if (!deletedLeg) {
+        throw new Error("Leg not found for deletion");
+    }
+    return deletedLeg;
+}

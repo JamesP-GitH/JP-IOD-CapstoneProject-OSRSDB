@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
+const { Schema } = mongoose;
 
 const equipmentSchema = new Schema(
     {
@@ -35,4 +35,5 @@ const ringSchema = new Schema(
     { strict: false }
 );
 
-module.exports = mongoose.model("ring", ringSchema);
+const Ring = mongoose.models.Ring || mongoose.model("Ring", ringSchema);
+export default Ring;

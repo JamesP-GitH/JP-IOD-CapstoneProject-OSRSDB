@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Row, Col, OverlayTrigger, Image } from "react-bootstrap";
 import ItemTooltipCard from "./ItemTooltipCard";
+import Link from "next/link";
 
 function ItemCard({ item, onClick }) {
     if (!item) return null;
@@ -24,10 +25,12 @@ function ItemCard({ item, onClick }) {
                             </Col>
                             <Col>
                                 <Card.Title className="item-name fw-semibold mb-1" style={{ fontSize: "1.1vw" }}>
-                                    {item.wiki_name}
+                                    <Link href={`/item/${item._id}`} className="item-link text-dark" onClick={(e) => e.stopPropagation()}>
+                                        {item.wiki_name}
+                                    </Link>
                                 </Card.Title>
                                 <Card.Subtitle className="item-meta text-muted small" style={{ fontSize: "1.1vw" }}>
-                                    ID: {item.id ?? "N/A"} | Members: {item.members ? "Yes" : "No"}
+                                    ID: {item._id ?? "N/A"} | Members: {item.members ? "Yes" : "No"}
                                 </Card.Subtitle>
                             </Col>
                         </Row>

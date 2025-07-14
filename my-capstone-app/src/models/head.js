@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
+const { Schema } = mongoose;
 
 const equipmentSchema = new Schema(
     {
@@ -35,4 +35,5 @@ const headSchema = new Schema(
     { strict: false }
 );
 
-module.exports = mongoose.model("head", headSchema);
+const Head = mongoose.models.Head || mongoose.model("Head", headSchema);
+export default Head;

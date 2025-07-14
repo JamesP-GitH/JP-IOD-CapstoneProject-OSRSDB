@@ -1,96 +1,48 @@
-"use strict";
-let Models = require("../models");
+import { Ring } from "@/models";
 
-// Get all ring items
-const getAllRings = (req, res) => {
-    Models.Ring.find({})
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getAllRings() {
+    return await Ring.find({});
+}
 
-// Get a single ring item by its ID
-const getRingById = (req, res) => {
-    Models.Ring.findById(req.params.id)
-        .then((data) => {
-            if (!data) {
-                return res.status(404).send({ result: 404, message: "Ring not found" });
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
-// Get ring items by name
-const getRingByName = (req, res) => {
-    Models.Ring.find({ name: { $regex: req.params.name, $options: "i" } })
-        .then((data) => {
-            if (data.length === 0) {
-                return res.status(404).json({ message: "No rings found matching that name" });
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getRingById(id) {
+    const ring = await Ring.findById(id);
+    if (!ring) {
+        throw new Error("Ring not found");
+    }
+    return ring;
+}
 
-// Get all ring names only
-const getRingNames = (req, res) => {
-    Models.Ring.find({}, { name: 1, _id: 0 })
-        .then((data) => {
-            const names = data.map((item) => item.name);
-            res.send({ result: 200, data: names });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getRingByName(name) {
+    const rings = await Ring.find({ name: { $regex: name, $options: "i" } });
+    if (rings.length === 0) {
+        throw new Error("No ring items found matching that name");
+    }
+    return rings;
+}
 
-// Create a new ring item
-const createRing = (req, res) => {
-    const newRing = new Models.Ring(req.body);
-    newRing
-        .save()
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function getRingNames() {
+    const data = await Ring.find({}, { name: 1, _id: 0 });
+    const names = data.map((item) => item.name);
+    return names;
+}
 
-// Update an existing ring item by ID
-const updateRing = (req, res) => {
-    Models.Ring.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function createRing(ringData) {
+    const newRing = new Ring(ringData);
+    return await newRing.save();
+}
 
-// Delete a ring item by ID
-const deleteRing = (req, res) => {
-    Models.Ring.findByIdAndDelete(req.params.id)
-        .then((data) => res.send({ result: 200, data }))
-        .catch((err) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
-};
+export async function updateRing(id, ringData) {
+    const updatedRing = await Ring.findByIdAndUpdate(id, ringData, { new: true });
+    if (!updatedRing) {
+        throw new Error("Ring not found for update");
+    }
+    return updatedRing;
+}
 
-module.exports = {
-    getAllRings,
-    getRingById,
-    getRingByName,
-    getRingNames,
-    createRing,
-    updateRing,
-    deleteRing,
-};
+export async function deleteRing(id) {
+    const deletedRing = await Ring.findByIdAndDelete(id);
+    if (!deletedRing) {
+        throw new Error("Ring not found for deletion");
+    }
+    return deletedRing;
+}

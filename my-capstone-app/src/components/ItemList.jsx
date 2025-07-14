@@ -32,9 +32,9 @@ function ItemList({ items, slot, loading, error, onItemClick }) {
             case "cost-low":
                 return sorted.sort((a, b) => a.cost - b.cost);
             case "id-asc":
-                return sorted.sort((a, b) => a.id - b.id);
+                return sorted.sort((a, b) => a._id - b._id);
             case "id-desc":
-                return sorted.sort((a, b) => b.id - a.id);
+                return sorted.sort((a, b) => b._id - a._id);
             default:
                 return sorted;
         }
@@ -76,7 +76,7 @@ function ItemList({ items, slot, loading, error, onItemClick }) {
             <Container className="justify-content-center item-list-wrapper" style={{ overflowY: "auto", height: "256px" }}>
                 <ListGroup>
                     {sortedItems.map((item) => (
-                        <ItemCard key={item.id} item={item} onClick={() => onItemClick(item)} />
+                        <ItemCard key={item._id} item={item} onClick={() => onItemClick(item)} />
                     ))}
                 </ListGroup>
             </Container>

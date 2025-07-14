@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
+const { Schema } = mongoose;
 
 const equipmentSchema = new Schema(
     {
@@ -35,4 +35,5 @@ const ammoSchema = new Schema(
     { strict: false }
 );
 
-module.exports = mongoose.model("ammo", ammoSchema);
+const Ammo = mongoose.models.Ammo || mongoose.model("Ammo", ammoSchema);
+export default Ammo;
