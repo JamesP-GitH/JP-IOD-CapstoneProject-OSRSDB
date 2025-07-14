@@ -21,7 +21,7 @@ function SaveSetup({ gear }) {
             created: new Date().toISOString(),
         });
 
-        localStorage.setItem("savedLoadouts", JSON.stringify(saved));
+        localStorage.setItem("savedSetups", JSON.stringify(saved));
         setSetupName("");
         setTags([]);
         setShowToast(true);
