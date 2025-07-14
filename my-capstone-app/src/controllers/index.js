@@ -23,6 +23,7 @@ async function getItemById(id) {
     return null;
 }
 
+// Generic name-based search (case-insensitive)
 async function getItemByName(name) {
     for (const model of itemModels) {
         const results = await model.find({ name: new RegExp(`^${name}$`, "i") });
