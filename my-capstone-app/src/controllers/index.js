@@ -23,6 +23,13 @@ async function getItemById(id) {
     return null;
 }
 
+async function getItemByName(name) {
+    for (const model of itemModels) {
+        const results = await model.find({ name: new RegExp(`^${name}$`, "i") });
+        results.push(...results);
+    }
+}
+
 module.exports = {
     weaponController,
     shieldController,
@@ -36,4 +43,5 @@ module.exports = {
     neckController,
     ringController,
     getItemById,
+    getItemByName,
 };
