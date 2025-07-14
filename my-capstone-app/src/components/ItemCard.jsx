@@ -27,7 +27,7 @@ function ItemCard({ item, onClick }) {
                                     {item.wiki_name}
                                 </Card.Title>
                                 <Card.Subtitle className="item-meta text-muted small" style={{ fontSize: "1.1vw" }}>
-                                    ID: {item.id ?? "N/A"} | Members: {item.members ? "Yes" : "No"}
+                                    ID: {item._id ?? "N/A"} | Members: {item.members ? "Yes" : "No"}
                                 </Card.Subtitle>
                             </Col>
                         </Row>
