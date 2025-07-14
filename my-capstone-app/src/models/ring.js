@@ -35,5 +35,5 @@ const ringSchema = new Schema(
     { strict: false }
 );
 
-const Ring = mongoose.models.Ring || mongoose.model("ring", ringSchema);
+const Ring = mongoose.models.Ring || mongoose.model("Ring", ringSchema);
 export default Ring;

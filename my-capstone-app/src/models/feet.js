@@ -35,5 +35,5 @@ const feetSchema = new Schema(
     { strict: false }
 );
 
-const Feet = mongoose.models.Feet || mongoose.model("feet", feetSchema);
+const Feet = mongoose.models.Feet || mongoose.model("Feet", feetSchema);
 export default Feet;

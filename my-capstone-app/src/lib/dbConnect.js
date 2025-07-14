@@ -1,17 +1,37 @@
-"use strict";
-const Mongoose = require("mongoose");
-// if the connection fails, try 127.0.0.1 instead of localhost below
+import mongoose from "mongoose";
+
 const uri = process.env.DB_URI || "mongodb://localhost/MiniProject3";
 
-// Connect to MongoDB
-Mongoose.connect(uri)
-    .then(() => console.log("MongoDB Connected"))
-    .catch((error) => console.log("MongoDB Error: " + error.message));
+if (!uri) {
+    throw new Error("DB_URI environment variable is not set");
+}
 
-// Get the default connection
-const db = Mongoose.connection;
+let cached = global.mongoose;
 
-// Bind connection to error event (to get notification of connection errors)
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
+if (!cached) {
+    cached = global.mongoose = { conn: null, promise: null };
+}
 
-exports.Mongoose = Mongoose;
+async function dbConnect() {
+    if (cached.conn) {
+        return cached.conn;
+    }
+
+    if (!cached.promise) {
+        cached.promise = mongoose
+            .connect(uri)
+            .then((mongoose) => {
+                console.log("MongoDB Connected");
+                return mongoose;
+            })
+            .catch((error) => {
+                console.error("MongoDB Connection Error:", error.message);
+                throw error;
+            });
+    }
+
+    cached.conn = await cached.promise;
+    return cached.conn;
+}
+
+export default dbConnect;

@@ -35,5 +35,5 @@ const shieldSchema = new Schema(
     { strict: false }
 );
 
-const Shield = mongoose.models.Shield || mongoose.model("shield", shieldSchema);
+const Shield = mongoose.models.Shield || mongoose.model("Shield", shieldSchema);
 export default Shield;

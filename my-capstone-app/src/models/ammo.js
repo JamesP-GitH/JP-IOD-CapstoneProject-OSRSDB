@@ -35,5 +35,5 @@ const ammoSchema = new Schema(
     { strict: false }
 );
 
-const Ammo = mongoose.models.Ammo || mongoose.model("ammo", ammoSchema);
+const Ammo = mongoose.models.Ammo || mongoose.model("Ammo", ammoSchema);
 export default Ammo;

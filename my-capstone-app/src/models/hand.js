@@ -35,5 +35,5 @@ const handSchema = new Schema(
     { strict: false }
 );
 
-const Hand = mongoose.models.Hand || mongoose.model("hand", handSchema);
+const Hand = mongoose.models.Hand || mongoose.model("Hand", handSchema);
 export default Hand;

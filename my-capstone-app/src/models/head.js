@@ -35,5 +35,5 @@ const headSchema = new Schema(
     { strict: false }
 );
 
-const Head = mongoose.models.Head || mongoose.model("head", headSchema);
+const Head = mongoose.models.Head || mongoose.model("Head", headSchema);
 export default Head;

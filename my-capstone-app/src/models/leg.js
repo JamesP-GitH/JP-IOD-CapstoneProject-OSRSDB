@@ -35,5 +35,5 @@ const legSchema = new Schema(
     { strict: false }
 );
 
-const Leg = mongoose.models.Leg || mongoose.model("leg", legSchema);
+const Leg = mongoose.models.Leg || mongoose.model("Leg", legSchema);
 export default Leg;

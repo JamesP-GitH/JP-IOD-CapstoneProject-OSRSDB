@@ -58,5 +58,5 @@ const itemSchema = new Schema(
     { strict: false }
 );
 
-const Weapon = mongoose.models.Weapon || mongoose.model("weapon", itemSchema);
+const Weapon = mongoose.models.Weapon || mongoose.model("Weapon", itemSchema);
 export default Weapon;

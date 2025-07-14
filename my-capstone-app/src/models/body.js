@@ -35,5 +35,5 @@ const bodySchema = new Schema(
     { strict: false }
 );
 
-const Body = mongoose.models.Body || mongoose.model("body", bodySchema);
+const Body = mongoose.models.Body || mongoose.model("Body", bodySchema);
 export default Body;

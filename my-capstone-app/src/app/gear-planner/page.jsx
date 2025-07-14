@@ -19,7 +19,7 @@ function GearPlanner() {
     const [selectedSpellName, setSelectedSpellName] = useState(null);
 
     const items = useMemo(() => {
-        return data ? Object.entries(data).map(([id, item]) => ({ id, ...item })) : [];
+        return Array.isArray(data) ? data : [];
     }, [data]);
     const isTwoHanded = gear.weapon?.equipment?.slot === "2h";
 

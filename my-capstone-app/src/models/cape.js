@@ -35,5 +35,5 @@ const capeSchema = new Schema(
     { strict: false }
 );
 
-const Cape = mongoose.models.Cape || mongoose.model("cape", capeSchema);
+const Cape = mongoose.models.Cape || mongoose.model("Cape", capeSchema);
 export default Cape;

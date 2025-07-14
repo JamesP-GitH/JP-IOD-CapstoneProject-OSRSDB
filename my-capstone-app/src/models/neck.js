@@ -35,5 +35,5 @@ const neckSchema = new Schema(
     { strict: false }
 );
 
-const Neck = mongoose.models.Neck || mongoose.model("neck", neckSchema);
+const Neck = mongoose.models.Neck || mongoose.model("Neck", neckSchema);
 export default Neck;
