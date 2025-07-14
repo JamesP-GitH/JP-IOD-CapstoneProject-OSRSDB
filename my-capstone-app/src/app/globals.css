@@ -19,3 +19,8 @@ html {
 .item-link:hover {
     text-decoration: underline;
 }
+
+body.modal-open {
+    overflow: hidden;
+    padding-right: 0 !important;
+}

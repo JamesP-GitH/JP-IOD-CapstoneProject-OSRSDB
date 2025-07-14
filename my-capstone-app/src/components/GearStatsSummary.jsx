@@ -52,7 +52,7 @@ function GearStatsSummary({ personalStats, activePrayers, activeStyle, selectedS
         <div className="p-2 mx-4">
             <h5>Gear Stat Summary</h5>
             <Row className="small">
-                <Col xs={12} md={2}>
+                <Col xs={12} md={3}>
                     <strong>Attack</strong>
                     <div>Stab: {formatBonus(totalStats.attack_stab)}</div>
                     <div>Slash: {formatBonus(totalStats.attack_slash)}</div>
@@ -60,7 +60,7 @@ function GearStatsSummary({ personalStats, activePrayers, activeStyle, selectedS
                     <div>Magic: {formatBonus(totalStats.attack_magic)}</div>
                     <div>Ranged: {formatBonus(totalStats.attack_ranged)}</div>
                 </Col>
-                <Col xs={12} md={2}>
+                <Col xs={12} md={3}>
                     <strong>Defence</strong>
                     <div>Stab: {formatBonus(totalStats.defence_stab)}</div>
                     <div>Slash: {formatBonus(totalStats.defence_slash)}</div>
@@ -68,7 +68,7 @@ function GearStatsSummary({ personalStats, activePrayers, activeStyle, selectedS
                     <div>Magic: {formatBonus(totalStats.defence_magic)}</div>
                     <div>Ranged: {formatBonus(totalStats.defence_ranged)}</div>
                 </Col>
-                <Col xs={12} md={2}>
+                <Col xs={12} md={3}>
                     <strong>Other</strong>
                     <div>Strength: {formatBonus(totalStats.melee_strength)}</div>
                     <div>Ranged Strength: {formatBonus(totalStats.ranged_strength)}</div>
