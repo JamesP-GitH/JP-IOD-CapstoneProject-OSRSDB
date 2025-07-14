@@ -45,7 +45,7 @@ function SaveSetup({ gear }) {
             </Button>
 
             {/* Toast Notification */}
-            <ToastContainer position="top-end" className="p-3">
+            <ToastContainer position="top-center" className="p-3">
                 <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide bg="success">
                     <ToastHeader>
                         <strong className="me-auto">Success</strong>

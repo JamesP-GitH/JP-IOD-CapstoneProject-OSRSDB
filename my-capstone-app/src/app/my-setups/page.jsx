@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
+import { useRouter } from "next/navigation";
 import { Container, Card, Row, Col, Button, Badge } from "react-bootstrap";
 import { GearContext } from "@/context/GearContext";
 
 function MySetupsPage() {
     const [setups, setSetups] = useState([]);
     const { setGear, resetGear } = useContext(GearContext);
+    const router = useRouter();
 
     useEffect(() => {
         const saved = JSON.parse(localStorage.getItem("savedSetups") || "[]");
@@ -25,6 +27,8 @@ function MySetupsPage() {
         Object.entries(gearData).forEach(([slot, item]) => {
             setGear(slot, item);
         });
+
+        router.push("./gear-planner");
     }
 
     if (setups.length === 0) {
