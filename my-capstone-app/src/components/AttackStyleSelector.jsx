@@ -2,14 +2,16 @@ import React, { useContext, useEffect, useState } from "react";
 import { GearContext } from "@/context/GearContext";
 import AttackStyleCard from "./AttackStyleCard";
 import SpellSelector from "./SpellSelector";
+import AmmoSelector from "./AmmoSelector";
 
-function AttackStyleSelector({ onStyleChange, activeStyle, selectedSpellName }) {
+function AttackStyleSelector({ onStyleChange, activeStyle, selectedSpellName, selectedAmmoName }) {
     const { gear } = useContext(GearContext);
     const weaponStyles = gear.weapon?.weapon?.stances || [];
     const weaponType = gear.weapon?.weapon?.weapon_type || "";
 
     const [selectedStyle, setSelectedStyle] = useState(activeStyle || null);
     const [selectedSpell, setSelectedSpell] = useState(selectedSpellName || null);
+    const [selectedAmmo, setSelectedAmmo] = useState(selectedAmmoName || null);
 
     useEffect(() => {
         if (activeStyle) {
@@ -27,6 +29,18 @@ function AttackStyleSelector({ onStyleChange, activeStyle, selectedSpellName }) 
             setSelectedSpell(selectedSpellName);
         }
     }, [selectedSpellName]);
+
+    useEffect(() => {
+        if (selectedAmmoName) {
+            setSelectedAmmo(selectedAmmoName);
+        }
+    }, [selectedAmmoName]);
+
+    useEffect(() => {
+        setSelectedSpell(null);
+        setSelectedAmmo(null);
+        onStyleChange?.(selectedStyle, null, null);
+    }, [gear.weapon?._id]);
 
     function handleStyleChange(style) {
         setSelectedStyle(style);
@@ -48,6 +62,17 @@ function AttackStyleSelector({ onStyleChange, activeStyle, selectedSpellName }) 
     }
     const isMagic = isMagicStyle(selectedStyle);
 
+    function isBlowpipe(_id) {
+        return _id === 12926 || _id === 28688 || _id === 30374;
+    }
+    const isToxicBlowpipe = isBlowpipe(gear.weapon?._id);
+
+    function handleAmmoSelect(dart) {
+        setSelectedAmmo(dart);
+        setSelectedSpell(null);
+        onStyleChange?.(selectedStyle, null, selectedAmmo);
+    }
+
     return (
         <>
             {weaponStyles.map((style, index) => (
@@ -60,6 +85,7 @@ function AttackStyleSelector({ onStyleChange, activeStyle, selectedSpellName }) 
                 />
             ))}
             {isMagic && <SpellSelector selectedSpellName={selectedSpell} onSpellSelect={handleSpellSelect} />}
+            {isToxicBlowpipe && <AmmoSelector selectedAmmoName={selectedAmmo} onAmmoSelect={handleAmmoSelect} />}
         </>
     );
 }
