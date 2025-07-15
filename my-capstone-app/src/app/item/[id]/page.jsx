@@ -13,7 +13,7 @@ export default async function ItemPage({ params }) {
         }
 
         return (
-            <div className="item-page px-5 py-3">
+            <div className="item-page px-4 py-3">
                 <ItemDetails item={item} />
             </div>
         );

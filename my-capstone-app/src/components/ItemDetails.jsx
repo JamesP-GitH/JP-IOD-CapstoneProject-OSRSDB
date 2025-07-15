@@ -192,16 +192,16 @@ function ItemDetails({ item }) {
 
                         <h5 className="fw-bold px-2">Other Bonuses</h5>
                         <Row className="text-center mb-1">
-                            <Col md={2} sm={4} className="stat-block border-end">
+                            <Col md={3} sm={6} className="stat-block border-end">
                                 Melee Strength: {formatBonus(equipment.melee_strength)}
                             </Col>
-                            <Col md={2} sm={4} className="stat-block border-end">
+                            <Col md={3} sm={6} className="stat-block border-end">
                                 Ranged Strength: {formatBonus(equipment.ranged_strength)}
                             </Col>
-                            <Col md={2} sm={4} className="stat-block border-end">
+                            <Col md={3} sm={6} className="stat-block border-end">
                                 Magic Damage: {formatBonus(equipment.magic_damage)}
                             </Col>
-                            <Col md={2} sm={4} className="stat-block border-end">
+                            <Col md={3} sm={6} className="stat-block">
                                 Prayer Bonus: {formatBonus(equipment.prayer)}
                             </Col>
                         </Row>
