@@ -4,7 +4,7 @@ import PrayerSelector from "./PrayerSelector";
 import StatsForm from "./StatsForn";
 import AttackStyleSelector from "./AttackStyleSelector";
 
-function PersonalStatsPanel({ onStatsChange, onPrayersChange, onStyleChange, activeStyle, selectedSpellName }) {
+function PersonalStatsPanel({ onStatsChange, onPrayersChange, onStyleChange, activeStyle, selectedSpellName, selectedAmmoName }) {
     const [stats, setStats] = useState({
         hitpointsCurrent: 99,
         hitpointsLevel: 99,
@@ -59,7 +59,12 @@ function PersonalStatsPanel({ onStatsChange, onPrayersChange, onStyleChange, act
                 </Tab>
                 <Tab eventKey={TAB_KEYS.STYLE} title={<Image src="/icons/Combat_icon.png" />}>
                     <Card.Title className="mb-0">Attack Style</Card.Title>
-                    <AttackStyleSelector onStyleChange={onStyleChange} activeStyle={activeStyle} selectedSpellName={selectedSpellName} />
+                    <AttackStyleSelector
+                        onStyleChange={onStyleChange}
+                        activeStyle={activeStyle}
+                        selectedSpellName={selectedSpellName}
+                        selectedAmmoName={selectedAmmoName}
+                    />
                 </Tab>
             </Tabs>
         </Container>

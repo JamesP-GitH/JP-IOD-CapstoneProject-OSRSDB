@@ -18,9 +18,7 @@ function GearPlanner() {
     const [activePrayers, setActivePrayers] = useState([]);
     const [activeStyle, setActiveStyle] = useState();
     const [selectedSpellName, setSelectedSpellName] = useState(null);
-    const [showToast, setShowToast] = useState(false);
-    const [setupName, setSetupName] = useState("");
-    const [tags, setTags] = useState("");
+    const [selectedAmmoName, setSelectedAmmoName] = useState(null);
 
     const items = useMemo(() => {
         return Array.isArray(data) ? data : [];
@@ -39,34 +37,14 @@ function GearPlanner() {
         }
     }
 
-    function handleStyleChange(style, spell) {
+    function handleStyleChange(style, spell, ammo) {
         setActiveStyle(style);
         setSelectedSpellName(spell || null);
+        setSelectedAmmoName(ammo || null);
     }
 
     function clearSlot(slot) {
         setGear(slot, null);
-    }
-
-    function handleSaveSetup() {
-        if (!setupName) return alert("Please enter a name for your gear setup.");
-
-        const saved = JSON.parse(localStorage.getItem("savedSetups") || "[]");
-
-        saved.push({
-            name: setupName.trim(),
-            tags: tags
-                .split(",")
-                .map((tag) => tag.trim().toLowerCase())
-                .filter(Boolean),
-            gear,
-            created: new Date().toISOString(),
-        });
-
-        localStorage.setItem("savedSetups", JSON.stringify(saved));
-        setSetupName("");
-        setTags("");
-        setShowToast(true);
     }
 
     return (
@@ -80,6 +58,7 @@ function GearPlanner() {
                             onStyleChange={handleStyleChange}
                             activeStyle={activeStyle}
                             selectedSpellName={selectedSpellName}
+                            selectedAmmoName={selectedAmmoName}
                         />
                     </Col>
                     <Col md={4} sx={12}>

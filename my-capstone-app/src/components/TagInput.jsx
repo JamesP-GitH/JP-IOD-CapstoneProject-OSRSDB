@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Form, Badge } from "react-bootstrap";
 
-function TagInput({ tags, setTags, label = "Tags" }) {
+function TagInput({ tags, setTags}) {
     const [input, setInput] = useState("");
 
     const handleKeyDown = (e) => {
@@ -22,8 +22,7 @@ function TagInput({ tags, setTags, label = "Tags" }) {
     };
 
     return (
-        <Form.Group className="mb-3">
-            <Form.Label>{label}</Form.Label>
+        <Form.Group className="mb-2">
             <Form.Control
                 type="text"
                 placeholder="Type a tag and press Enter or comma"

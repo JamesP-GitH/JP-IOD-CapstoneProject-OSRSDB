@@ -54,7 +54,7 @@ function IconWithHover({ icon, wiki_url, alt }) {
                 </ModalHeader>
                 <ModalBody className="text-center">
                     {highResUrl ? (
-                        <img src={highResUrl} alt={`${alt} high res`} style={{ width: "auto", maxHeight: "500px", opacity: 1 }} />
+                        <img src={highResUrl} alt={`${alt} high res`} style={{ maxWidth: "300px", maxHeight: "400px", opacity: 1 }} />
                     ) : (
                         <p>High-res image not available</p>
                     )}

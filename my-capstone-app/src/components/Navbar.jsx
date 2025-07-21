@@ -10,7 +10,7 @@ function AppNavbar() {
         <BootstrapNavbar bg="light" expand="lg" className="mb-1">
             <Container>
                 <Link href="/" className="navbar-brand">
-                    Gear Planner
+                    OSRS Gear Planner
                 </Link>
                 <BootstrapNavbar.Toggle aria-controls="main-navbar-nav" />
                 <BootstrapNavbar.Collapse id="main-navbar-nav">
