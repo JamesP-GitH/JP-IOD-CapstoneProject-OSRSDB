@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Image, Button, Container, Row, Col } from "react-bootstrap";
 
+// Special prayers that are mutually exclusive with others
 const specialPrayers = ["Chivalry", "Piety", "Rigour", "Augury"];
 
+// Prayer groups by effect type — each group is mutually exclusive within itself and with certain others
 const defenseBasics = ["Thick_Skin", "Rock_Skin", "Steel_Skin"];
 const attackBasics = ["Clarity_of_Thought", "Improved_Reflexes", "Incredible_Reflexes"];
 const strengthBasics = ["Burst_of_Strength", "Superhuman_Strength", "Ultimate_Strength"];
 const rangedBasics = ["Sharp_Eye", "Hawk_Eye", "Eagle_Eye", "Deadeye"];
 const magicBasics = ["Mystic_Will", "Mystic_Lore", "Mystic_Might", "Mystic_Vigour"];
 
+// Predefined display order for prayers in the UI grid
 const prayerOrder = [
     "Burst_of_Strength",
     "Clarity_of_Thought",
@@ -36,6 +39,7 @@ const prayerOrder = [
 function PrayerSelector({ onPrayersChange }) {
     const [activePrayers, setActivePrayers] = useState([]);
 
+    // Notify parent any time activePrayers updates
     useEffect(() => {
         if (typeof onPrayersChange === "function") {
             onPrayersChange(activePrayers);
@@ -47,15 +51,18 @@ function PrayerSelector({ onPrayersChange }) {
             const isActive = current.includes(prayer);
             let updated = [];
 
+            // If it's a special prayer, only one can be active at a time
             if (specialPrayers.includes(prayer)) {
                 updated = isActive ? current.filter((p) => p !== prayer) : [prayer];
                 return updated;
             }
 
+            // If a special prayer is active, remove it when another prayer is clicked
             if (current.some((p) => specialPrayers.includes(p))) {
                 current = current.filter((p) => !specialPrayers.includes(p));
             }
 
+            // Define prayer groups
             const groupMap = {
                 defense: defenseBasics,
                 attack: attackBasics,
@@ -64,15 +71,18 @@ function PrayerSelector({ onPrayersChange }) {
                 magic: magicBasics,
             };
 
+            // Identify which group the clicked prayer belongs to
             let group = Object.entries(groupMap).find(([, list]) => list.includes(prayer))?.[0];
-
             if (!group) return current;
 
+            // If already active, just remove it
             if (isActive) {
                 updated = current.filter((p) => p !== prayer);
             } else {
+                // Otherwise, deactivate incompatible prayers before activating the new one
                 updated = current.filter((p) => {
                     if (group === "ranged" || group === "magic") {
+                        // Ranged/magic are mutually exclusive with each other and also with attack/strength
                         return (
                             !rangedBasics.includes(p) &&
                             !magicBasics.includes(p) &&
@@ -81,6 +91,7 @@ function PrayerSelector({ onPrayersChange }) {
                         );
                     }
                     if (group === "attack" || group === "strength") {
+                        // Attack/strength are mutually exclusive with ranged/magic and each other
                         return !rangedBasics.includes(p) && !magicBasics.includes(p) && !groupMap[group].includes(p);
                     }
                     if (group === "defense") {
@@ -89,15 +100,16 @@ function PrayerSelector({ onPrayersChange }) {
                     return true;
                 });
 
+                // Activate the selected prayer
                 updated.push(prayer);
             }
 
             return updated;
         });
     }
-
+    
+    // Build 2D array of prayers to display in a grid layout
     const columnsPerRow = 4;
-
     const rows = [];
     for (let i = 0; i < prayerOrder.length; i += columnsPerRow) {
         rows.push(prayerOrder.slice(i, i + columnsPerRow));
