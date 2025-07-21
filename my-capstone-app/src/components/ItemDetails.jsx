@@ -2,9 +2,13 @@ import React from "react";
 import { Card, Row, Col, Image, CardHeader, CardBody } from "react-bootstrap";
 import IconWithHover from "./IconWithHover";
 
+// Main component to display detailed information about a specific item
 function ItemDetails({ item }) {
+    // If no item is passed in, show a fallback message
     if (!item) return <div>Item not found</div>;
     ["bladed_staff", "powered_staff", "powered_wand", "staff"];
+
+    // Destructure relevant properties from the item object
     const {
         icon,
         wiki_name,
@@ -23,6 +27,7 @@ function ItemDetails({ item }) {
         weapon,
     } = item;
 
+    // Utility: format snake_case into readable Title Case
     function formatLabel(label) {
         return label
             .split("_")
@@ -30,10 +35,12 @@ function ItemDetails({ item }) {
             .join(" ");
     }
 
+    // Utility: properly format numeric bonuses (e.g., +5, -3, or —)
     function formatBonus(value) {
         return value !== undefined && value !== null ? (value >= 0 ? `+${value}` : `${value}`) : "—";
     }
 
+    // Utility: map incomplete or missing stance data into a full fallback structure
     function getCorrectedStance(weapon_type, stance) {
         const { combat_style, attack_type, attack_style } = stance;
 
@@ -69,9 +76,10 @@ function ItemDetails({ item }) {
 
         return { attack_type: "None", attack_style: "None" };
     }
+
     return (
         <Card className="item-details-card">
-            {/* Item Header */}
+            {/* Card header with icon, name, ID, and wiki link */}
             <CardHeader className="d-flex align-items-center justify-content-between">
                 <div className="d-flex align-items-center">
                     {icon && <IconWithHover icon={icon} wiki_url={wiki_url} alt={wiki_name} />}
@@ -87,7 +95,7 @@ function ItemDetails({ item }) {
             </CardHeader>
 
             <CardBody>
-                {/* Item Info */}
+                {/* Item Meta Information */}
                 <h5 className="fw-bold px-2">Item Info</h5>
                 <Row className="text-center mb-3">
                     <Col md={3} sm={6} className="fw-semibold border-end">
@@ -124,7 +132,7 @@ function ItemDetails({ item }) {
                     </Col>
                 </Row>
 
-                {/* Weapon Info */}
+                {/* Weapon Specific Info */}
                 {weapon && (
                     <>
                         <h5 className="fw-bold px-2">Weapon Info</h5>
@@ -149,7 +157,7 @@ function ItemDetails({ item }) {
                     </>
                 )}
 
-                {/* Attack Bonuses */}
+                {/* Offensive Stats */}
                 {equipment && (
                     <>
                         <h5 className="fw-bold px-2">Attack Bonuses</h5>
@@ -171,6 +179,7 @@ function ItemDetails({ item }) {
                             </Col>
                         </Row>
 
+                        {/* Defensive Stats */}
                         <h5 className="fw-bold px-2">Defence Bonuses</h5>
                         <Row className="text-center mb-3">
                             <Col md={2} sm={4} className="stat-block border-end">
@@ -190,6 +199,7 @@ function ItemDetails({ item }) {
                             </Col>
                         </Row>
 
+                        {/* Misc Bonuses */}
                         <h5 className="fw-bold px-2">Other Bonuses</h5>
                         <Row className="text-center mb-1">
                             <Col md={3} sm={6} className="stat-block border-end">
