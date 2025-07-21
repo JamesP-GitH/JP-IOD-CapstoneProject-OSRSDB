@@ -5,48 +5,83 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 function AppNavbar() {
-    // Get the current pathname from Next.js router
     const pathname = usePathname();
 
     return (
-        // Bootstrap Navbar component with light background and expandable on large screens
-        <BootstrapNavbar bg="light" expand="lg" className="mb-1">
-            <Container>
-                {/* Logo linking to the home page */}
-                <Link href="/" className="navbar-brand">
-                    OSRS Gear Planner
-                </Link>
+        <>
+            <BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top" className="custom-navbar shadow-sm">
+                <Container>
+                    <Link href="/" className="navbar-brand custom-brand">
+                        🛡️ OSRS Gear Planner
+                    </Link>
 
-                {/* Toggle button for collapsing navbar on smaller screens */}
-                <BootstrapNavbar.Toggle aria-controls="main-navbar-nav" />
+                    <BootstrapNavbar.Toggle aria-controls="main-navbar-nav" />
 
-                {/* Collapsible navbar content (links) */}
-                <BootstrapNavbar.Collapse id="main-navbar-nav">
-                    <Nav className="ms-auto">
-                        {/* Link to Gear Planner page */}
-                        <Link href="/gear-planner">
-                            <Nav.Link active={pathname === "/gear-planner"} as="span">
-                                Plan Gear
-                            </Nav.Link>
-                        </Link>
+                    <BootstrapNavbar.Collapse id="main-navbar-nav">
+                        <Nav className="ms-auto">
+                            <Link href="/gear-planner" passHref>
+                                <Nav.Link as="span" className={pathname === "/gear-planner" ? "active-link" : ""}>
+                                    Plan Gear
+                                </Nav.Link>
+                            </Link>
 
-                        {/* Link to My Setups page */}
-                        <Link href="/my-setups">
-                            <Nav.Link active={pathname === "/my-setups"} as="span">
-                                My Setups
-                            </Nav.Link>
-                        </Link>
+                            <Link href="/my-setups" passHref>
+                                <Nav.Link as="span" className={pathname === "/my-setups" ? "active-link" : ""}>
+                                    My Setups
+                                </Nav.Link>
+                            </Link>
 
-                        {/* Link to About page */}
-                        <Link href="/about">
-                            <Nav.Link active={pathname === "/about"} as="span">
-                                About
-                            </Nav.Link>
-                        </Link>
-                    </Nav>
-                </BootstrapNavbar.Collapse>
-            </Container>
-        </BootstrapNavbar>
+                            <Link href="/about" passHref>
+                                <Nav.Link as="span" className={pathname === "/about" ? "active-link" : ""}>
+                                    About
+                                </Nav.Link>
+                            </Link>
+                        </Nav>
+                    </BootstrapNavbar.Collapse>
+                </Container>
+            </BootstrapNavbar>
+
+            <style jsx>{`
+                .custom-navbar {
+                    background: linear-gradient(90deg, #1a1a2e, #16213e);
+                    font-family: "Cinzel", serif;
+                }
+
+                .custom-brand {
+                    font-weight: 700;
+                    font-size: 1.5rem;
+                    letter-spacing: 1.5px;
+                    user-select: none;
+                }
+
+                .nav-link {
+                    font-weight: 500;
+                    font-size: 1.1rem;
+                    transition: color 0.3s ease;
+                    cursor: pointer;
+                    padding: 0.5rem 1rem;
+                }
+
+                .nav-link:hover {
+                    color: #f0c419; /* OSRS gold-ish accent */
+                }
+
+                .active-link {
+                    color: #f0c419 !important;
+                    font-weight: 700;
+                    border-bottom: 2px solid #f0c419;
+                }
+
+                /* Toggle button color override */
+                .navbar-dark .navbar-toggler {
+                    border-color: #f0c419;
+                }
+
+                .navbar-dark .navbar-toggler-icon {
+                    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='%23f0c419' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+                }
+            `}</style>
+        </>
     );
 }
 

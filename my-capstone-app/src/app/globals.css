@@ -24,3 +24,8 @@ body.modal-open {
     overflow: hidden;
     padding-right: 0 !important;
 }
+body {
+    padding-top: 56px; /* same height as fixed navbar */
+    margin: 0;
+    overflow-x: hidden; /* prevent horizontal scroll */
+}
