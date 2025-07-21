@@ -42,7 +42,7 @@ function MaxHitCalculator({
 
     const baseMaxMagicDamage = getSpellDamage(selectedSpellName);
     const visibleBonuses = 0; //placeholder
-    const voidMagicBonus = 0;
+    const voidMagicBonus = 0; //placeholder
     const shadowBonus = 0; //placeholder
     const salveBonus = 0; //placeholder
     const avariceBonus = 0; //placeholder
@@ -56,6 +56,7 @@ function MaxHitCalculator({
     const ahrimsDamnedBonus = 0; //placeholder
     const castleWarsBracletBonus = 0; //placeholder
     const charge = 0; //placeholder
+
     let weaponAttackType;
     let effectiveLevel, baseDamage, maxHit, prayerBonus;
     if (activeStyle?.attack_style === "magic") {
@@ -102,11 +103,17 @@ function MaxHitCalculator({
                             (1 + tomesBonus)
                     )
                 );
+                {
+                    /* Placeholder for onHitRoll */
+                }
                 const postHitRoll = Math.floor(
                     Math.abs(
                         Math.abs(Math.abs(preHitRoll * (1 + markOfDarknessBonus)) * (1 + ahrimsDamnedBonus)) * (1 + castleWarsBracletBonus)
                     )
                 );
+                {
+                    /* Placeholder for postCalcModifiers */
+                }
                 maxHit = postHitRoll;
             } else {
                 maxHit = "Please choose spell";
