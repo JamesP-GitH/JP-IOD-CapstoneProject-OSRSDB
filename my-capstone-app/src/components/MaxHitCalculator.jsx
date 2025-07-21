@@ -1,12 +1,9 @@
 import React from "react";
-import PrayerBonuses from "./PrayerBonuses";
-import { getSpellDamage } from "@/utils/SpellbookUtils";
-import { getDartDamage } from "@/utils/DartUtils";
+import PrayerBonuses from "./PrayerBonuses"; // Function to get active prayer bonuses
+import { getSpellDamage } from "@/utils/SpellbookUtils"; // Utility to get base spell damage by spell name
+import { getDartDamage } from "@/utils/DartUtils"; // Utility to get dart damage bonus
 
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
+// Main component for calculating maximum hit values
 function MaxHitCalculator({
     strengthLevel = 99,
     rangedLevel = 99,
@@ -21,6 +18,7 @@ function MaxHitCalculator({
     selectedSpellName,
     selectedAmmoName,
 }) {
+    // Combat style bonus lookups
     const meleeStyleBonuses = {
         aggressive: 3,
         controlled: 1,
@@ -32,21 +30,26 @@ function MaxHitCalculator({
         accurate: 3,
     };
 
+    // Get prayer bonus multipliers
     const bonuses = PrayerBonuses(activePrayers);
+
+    // Get style bonus from lookups
     const meleeStyleBonus = meleeStyleBonuses[activeStyle?.attack_style] || 0;
     const rangedStyleBonus = rangedStyleBonuses[activeStyle?.combat_style] || 0;
-    const voidBonus = 1; //placeholder
 
+    // Get dart damage bonus
     const dartBonus = getDartDamage(selectedAmmoName);
 
+    const voidBonus = 1; //placeholder
     const specialBonus = 1; //placeholder
     const potionBonus = 0; //placeholder
     const gearBonus = 1; //placeholder
     const chaosGauntletBoost = 0; //placeholder
 
+    // Determine base spell damage
     const baseMaxMagicDamage = getSpellDamage(selectedSpellName) || Math.abs(magicLevel / 3 + 1);
     const visibleBonuses = magicDamageBonus / 100;
-    console.log(visibleBonuses);
+
     const voidMagicBonus = 0; //placeholder
     const shadowBonus = 1; //placeholder
     const salveBonus = 0; //placeholder
@@ -62,13 +65,16 @@ function MaxHitCalculator({
     const castleWarsBracletBonus = 0; //placeholder
     const charge = 0; //placeholder
 
+    // Determine attack type
     let weaponAttackType;
-    let effectiveLevel, baseDamage, maxHit, prayerBonus;
     if (activeStyle?.attack_style === "magic") {
         weaponAttackType = "magic";
     } else {
         weaponAttackType = weaponType;
     }
+
+    // Calculate max hit depending on attack type
+    let effectiveLevel, baseDamage, maxHit, prayerBonus;
     switch (weaponAttackType) {
         case "melee":
             prayerBonus = bonuses.strength || 1;
@@ -83,9 +89,13 @@ function MaxHitCalculator({
             maxHit = Math.floor(baseDamage * specialBonus);
             break;
         case "magic":
+            // Only calculate if a spell is selected or if it's a magic experience style
             if (selectedSpellName || activeStyle?.experience.includes("magic")) {
                 prayerBonus = bonuses.magic || 0;
+
                 const baseDamageModifier = Math.floor(Math.abs(baseMaxMagicDamage + chaosGauntletBoost + charge));
+
+                // Primary calculation: apply most bonuses
                 const primaryMagicDamage = Math.floor(
                     Math.abs(
                         baseDamageModifier *
@@ -99,6 +109,8 @@ function MaxHitCalculator({
                                 prayerBonus)
                     )
                 );
+
+                // Simulate hit roll logic
                 const preHitRoll = Math.floor(
                     Math.abs(
                         Math.abs(
@@ -108,17 +120,22 @@ function MaxHitCalculator({
                             (1 + tomesBonus)
                     )
                 );
+
                 {
-                    /* Placeholder for onHitRoll */
+                    /* Placeholder for onHitRoll (not required at lower complexity) */
                 }
+
+                // Simulate additional modifiers after the hit is successful
                 const postHitRoll = Math.floor(
                     Math.abs(
                         Math.abs(Math.abs(preHitRoll * (1 + markOfDarknessBonus)) * (1 + ahrimsDamnedBonus)) * (1 + castleWarsBracletBonus)
                     )
                 );
+
                 {
-                    /* Placeholder for postCalcModifiers */
+                    /* Placeholder for postCalcModifiers (not required at lower complexity) */
                 }
+
                 maxHit = postHitRoll;
             } else {
                 maxHit = "Please choose spell";
