@@ -1,5 +1,7 @@
 import React from "react";
 
+// Object mapping prayer names to their respective stat bonuses.
+// Each bonus is a multiplier applied to the corresponding stat.
 const prayerBonuses = {
     Burst_of_Strength: { strength: 1.05 },
     Superhuman_Strength: { strength: 1.1 },
@@ -29,7 +31,10 @@ const prayerBonuses = {
     Augury: { magic: 0.04, defence: 1.25 },
 };
 
+// Function that takes an array of active prayer names and calculates
+// the highest bonus values per stat across all active prayers.
 function PrayerBonuses(activePrayers) {
+    // Initialize result with zero bonuses for all stats
     const result = {
         attack: 0,
         strength: 0,
@@ -38,10 +43,15 @@ function PrayerBonuses(activePrayers) {
         magic: 0,
     };
 
+    // Iterate over each active prayer
     activePrayers.forEach((prayer) => {
+        // Look up the bonus values for this prayer
         const bonus = prayerBonuses[prayer];
+        // If prayer is not found in the prayerBonuses object, skip it
         if (!bonus) return;
 
+        // For each stat affected by this prayer, update result if this prayer's
+        // bonus is greater than the current recorded bonus for that stat
         for (const stat in bonus) {
             if (bonus[stat] > result[stat]) {
                 result[stat] = bonus[stat];
@@ -49,6 +59,7 @@ function PrayerBonuses(activePrayers) {
         }
     });
 
+    // Return the final combined bonuses representing the highest multipliers
     return result;
 }
 
