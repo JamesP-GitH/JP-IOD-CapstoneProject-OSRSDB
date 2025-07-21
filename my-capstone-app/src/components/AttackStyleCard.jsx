@@ -10,9 +10,16 @@ function AttackStyleCard({ styles = {}, weaponType, selected = false, onSelect }
     const isRangedWeapon = rangedTypes.includes(weaponType);
     const styleName = formatCap(styles.combat_style, "Unknown");
 
-    const attackType = styles.attack_type ? formatCap(styles.attack_type) : isRangedWeapon ? "Ranged" : "—";
+    const isMagicStyle = !styles.attack_type && styles.experience && styles.experience.toLowerCase().includes("magic");
 
-    const attackStyle = styles.attack_style ? formatCap(styles.attack_style) : isRangedWeapon ? styleName : "—";
+    const attackType = styles.attack_type ? formatCap(styles.attack_type) : isMagicStyle ? "Magic" : isRangedWeapon ? "Ranged" : "—";
+    const attackStyle = styles.attack_style
+        ? formatCap(styles.attack_style)
+        : isMagicStyle
+        ? formatCap(styles.combat_style, "Unknown")
+        : isRangedWeapon
+        ? formatCap(styles.combat_style, "Unknown")
+        : "—";
 
     const cardClasses = classNames("style-card mb-1", {
         "border-primary": selected,

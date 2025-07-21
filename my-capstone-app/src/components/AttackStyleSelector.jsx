@@ -70,7 +70,7 @@ function AttackStyleSelector({ onStyleChange, activeStyle, selectedSpellName, se
     function handleAmmoSelect(dart) {
         setSelectedAmmo(dart);
         setSelectedSpell(null);
-        onStyleChange?.(selectedStyle, null, selectedAmmo);
+        onStyleChange?.(selectedStyle, null, dart);
     }
 
     return (

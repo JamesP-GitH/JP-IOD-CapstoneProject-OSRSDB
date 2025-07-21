@@ -1,6 +1,7 @@
 import React from "react";
 import PrayerBonuses from "./PrayerBonuses";
 import { getSpellDamage } from "@/utils/SpellbookUtils";
+import { getDartDamage } from "@/utils/DartUtils";
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -18,6 +19,7 @@ function MaxHitCalculator({
     activePrayers = [],
     activeStyle,
     selectedSpellName,
+    selectedAmmoName,
 }) {
     const meleeStyleBonuses = {
         aggressive: 3,
@@ -35,15 +37,18 @@ function MaxHitCalculator({
     const rangedStyleBonus = rangedStyleBonuses[activeStyle?.combat_style] || 0;
     const voidBonus = 1; //placeholder
 
+    const dartBonus = getDartDamage(selectedAmmoName);
+
     const specialBonus = 1; //placeholder
     const potionBonus = 0; //placeholder
     const gearBonus = 1; //placeholder
     const chaosGauntletBoost = 0; //placeholder
 
-    const baseMaxMagicDamage = getSpellDamage(selectedSpellName);
-    const visibleBonuses = 0; //placeholder
+    const baseMaxMagicDamage = getSpellDamage(selectedSpellName) || Math.abs(magicLevel / 3 + 1);
+    const visibleBonuses = magicDamageBonus / 100;
+    console.log(visibleBonuses);
     const voidMagicBonus = 0; //placeholder
-    const shadowBonus = 0; //placeholder
+    const shadowBonus = 1; //placeholder
     const salveBonus = 0; //placeholder
     const avariceBonus = 0; //placeholder
     const smokeBattlestaffBonus = 0; //placeholder
@@ -74,11 +79,11 @@ function MaxHitCalculator({
         case "ranged":
             prayerBonus = bonuses.ranged || 1;
             effectiveLevel = Math.floor((Math.floor((rangedLevel + potionBonus) * prayerBonus) + rangedStyleBonus + 8) * voidBonus);
-            baseDamage = Math.floor(Math.floor(0.5 + (effectiveLevel * (rangedStrengthBonus + 64)) / 640) * gearBonus);
+            baseDamage = Math.floor(Math.floor(0.5 + (effectiveLevel * (rangedStrengthBonus + dartBonus + 64)) / 640) * gearBonus);
             maxHit = Math.floor(baseDamage * specialBonus);
             break;
         case "magic":
-            if (selectedSpellName) {
+            if (selectedSpellName || activeStyle?.experience.includes("magic")) {
                 prayerBonus = bonuses.magic || 0;
                 const baseDamageModifier = Math.floor(Math.abs(baseMaxMagicDamage + chaosGauntletBoost + charge));
                 const primaryMagicDamage = Math.floor(

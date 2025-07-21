@@ -145,6 +145,7 @@ function GearPlanner() {
                             activePrayers={activePrayers}
                             activeStyle={activeStyle}
                             selectedSpellName={selectedSpellName}
+                            selectedAmmoName={selectedAmmoName}
                         />
                     </Col>
                     <Col>

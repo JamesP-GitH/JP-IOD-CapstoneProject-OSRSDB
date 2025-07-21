@@ -4,7 +4,7 @@ import { GearContext } from "@/context/GearContext";
 import MaxHitCalculator from "./MaxHitCalculator";
 import WeaponTypes from "../utils/WeaponTypesUtils";
 
-function GearStatsSummary({ personalStats, activePrayers, activeStyle, selectedSpellName }) {
+function GearStatsSummary({ personalStats, activePrayers, activeStyle, selectedSpellName, selectedAmmoName }) {
     const { gear } = useContext(GearContext);
     const weaponType = WeaponTypes(gear.weapon?.weapon.weapon_type || "unarmed");
 
@@ -89,6 +89,7 @@ function GearStatsSummary({ personalStats, activePrayers, activeStyle, selectedS
                         activePrayers={activePrayers || []}
                         activeStyle={activeStyle}
                         selectedSpellName={selectedSpellName || ""}
+                        selectedAmmoName={selectedAmmoName || ""}
                     />
                 </Col>
             </Row>

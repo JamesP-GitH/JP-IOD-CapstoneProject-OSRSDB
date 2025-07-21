@@ -19,14 +19,14 @@ const prayerBonuses = {
     Sharp_Eye: { ranged: 1.05 },
     Hawk_Eye: { ranged: 1.1 },
     Eagle_Eye: { ranged: 1.15 },
-    Deadeye: { ranged: 1.2 },
+    Deadeye: { ranged: 1.18 },
     Rigour: { ranged: 1.23, defence: 1.25 },
 
-    Mystic_Will: { magic: 1.05 },
-    Mystic_Lore: { magic: 1.1 },
-    Mystic_Might: { magic: 1.15 },
-    Mystic_Vigour: { magic: 1.2 },
-    Augury: { magic: 1.0, defence: 1.25 }, // Magic accuracy only
+    Mystic_Will: { magic: 0 },
+    Mystic_Lore: { magic: 0.01 },
+    Mystic_Might: { magic: 0.02 },
+    Mystic_Vigour: { magic: 0.03 },
+    Augury: { magic: 0.04, defence: 1.25 },
 };
 
 function PrayerBonuses(activePrayers) {
@@ -34,7 +34,7 @@ function PrayerBonuses(activePrayers) {
         attack: 0,
         strength: 0,
         defence: 0,
-        ranged: 1,
+        ranged: 0,
         magic: 0,
     };
 
