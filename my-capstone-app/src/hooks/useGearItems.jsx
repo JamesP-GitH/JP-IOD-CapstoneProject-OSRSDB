@@ -2,12 +2,14 @@
 
 import React, { useEffect, useReducer } from "react";
 
+// Initial state for the reducer
 const initialState = {
-    data: {},
-    loading: true,
-    error: null,
+    data: {}, // Will hold fetched gear items
+    loading: true, // Indicates loading state
+    error: null, // Stores any error message
 };
 
+// Reducer function to handle async states
 function dataReducer(state, action) {
     switch (action.type) {
         case "FETCH_START":
@@ -21,23 +23,26 @@ function dataReducer(state, action) {
     }
 }
 
+// Custom hook to fetch gear items for a specific slot
 function useGearItems(slot) {
     const [state, dispatch] = useReducer(dataReducer, initialState);
 
     useEffect(() => {
+        // If no slot is selected, don't fetch anything
         if (!slot) return;
 
-        let ignore = false;
+        let ignore = false; // Helps prevent state update on unmounted component
         dispatch({ type: "FETCH_START" });
 
         async function fetchData() {
             try {
-                const response = await fetch(`/api/${slot}`);
+                const response = await fetch(`/api/${slot}`); // Fetch items from backend
                 if (!response.ok) {
                     throw new Error(`Error fetching ${slot}: ${response.statusText}`);
                 }
                 const data = await response.json();
 
+                // Only update state if component is still mounted
                 if (!ignore) {
                     dispatch({ type: "FETCH_SUCCESS", payload: data });
                     console.log(`Success loading: ${slot}`);
@@ -52,12 +57,13 @@ function useGearItems(slot) {
 
         fetchData();
 
+        // Cleanup function to prevent state update after unmount
         return () => {
             ignore = true;
         };
-    }, [slot]);
+    }, [slot]); // Re-run effect when the slot changes
 
-    return state;
+    return state; // { data, loading, error }
 }
 
 export default useGearItems;
