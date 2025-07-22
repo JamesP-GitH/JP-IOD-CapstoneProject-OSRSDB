@@ -11,20 +11,30 @@ import PersonalStatsPanel from "@/components/PersonalStatsPanel";
 import SaveSetup from "@/components/SaveSetup";
 
 function GearPlanner() {
-    const [activeSlot, setActiveSlot] = useState(null);
-    const { data, loading, error } = useGearItems(activeSlot);
-    const { gear, setGear, resetGear } = useContext(GearContext);
+    // Local UI states
+    const [activeSlot, setActiveSlot] = useState(null); // Currently selected gear slot
+
     const [personalStats, setPersonalStats] = useState({});
     const [activePrayers, setActivePrayers] = useState([]);
     const [activeStyle, setActiveStyle] = useState();
     const [selectedSpellName, setSelectedSpellName] = useState(null);
     const [selectedAmmoName, setSelectedAmmoName] = useState(null);
 
+    // Context: shared gear state and functions
+    const { gear, setGear, resetGear } = useContext(GearContext);
+
+    // Custom hook: fetches gear items based on active slot
+    const { data, loading, error } = useGearItems(activeSlot);
+
+    // Ensure item list is always an array
     const items = useMemo(() => {
         return Array.isArray(data) ? data : [];
     }, [data]);
+
+    // Determine if current weapon is two-handed
     const isTwoHanded = gear.weapon?.equipment?.slot === "2h";
 
+    // Handle selection of a gear item from the list
     function handleItemSelect(item) {
         if (!activeSlot) return;
 
@@ -37,12 +47,14 @@ function GearPlanner() {
         }
     }
 
+    // Handle changes from the personal stats panel
     function handleStyleChange(style, spell, ammo) {
         setActiveStyle(style);
         setSelectedSpellName(spell || null);
         setSelectedAmmoName(ammo || null);
     }
 
+    // Clear an individual gear slot
     function clearSlot(slot) {
         setGear(slot, null);
     }
@@ -51,6 +63,7 @@ function GearPlanner() {
         <>
             <Container className="p-1">
                 <Row className="p-1">
+                    {/* Left column: Stats input panel */}
                     <Col md={4} sx={12}>
                         <PersonalStatsPanel
                             onStatsChange={setPersonalStats}
@@ -61,8 +74,11 @@ function GearPlanner() {
                             selectedAmmoName={selectedAmmoName}
                         />
                     </Col>
+
+                    {/* Middle column: Gear grid */}
                     <Col md={4} sx={12}>
                         <Container className="mt-4 ">
+                            {/* Clear all gear button */}
                             <Row className="mt-1 mb-2 d-flex justify-content-end">
                                 <Col className="">
                                     <Button variant="outline-secondary" size="sm" onClick={resetGear}>
@@ -70,15 +86,18 @@ function GearPlanner() {
                                     </Button>
                                 </Col>
                             </Row>
-                            {/* gear slots for selection, 5 rows like game*/}
+
+                            {/* Gear grid rows */}
+                            {/* Row 1: Head */}
                             <Row className="mb-2">
                                 {/* gear slots row 1 */}
                                 <Col className="d-flex justify-content-center">
                                     <GearSlot slot="head" item={gear.head} onClick={() => setActiveSlot("head")} onClear={clearSlot} />
                                 </Col>
                             </Row>
+
+                            {/* Row 2: Cape, Neck, Ammo */}
                             <Row className="mb-2 mx-2 justify-content-around d-flex p-0">
-                                {/* gear slots row 2 */}
                                 <Col className="d-flex justify-content-end p-1">
                                     <GearSlot slot="cape" item={gear.cape} onClick={() => setActiveSlot("cape")} onClear={clearSlot} />
                                 </Col>
@@ -89,6 +108,8 @@ function GearPlanner() {
                                     <GearSlot slot="ammo" item={gear.ammo} onClick={() => setActiveSlot("ammo")} onClear={clearSlot} />
                                 </Col>
                             </Row>
+
+                            {/* Row 3: Weapon, Body, Shield */}
                             <Row className="mb-2">
                                 {/* gear slots row 3 */}
                                 <Col className="d-flex justify-content-center">
@@ -112,14 +133,16 @@ function GearPlanner() {
                                     />
                                 </Col>
                             </Row>
+
+                            {/* Row 4: Legs */}
                             <Row className="mb-2">
-                                {/* gear slots row 4 */}
                                 <Col className="d-flex justify-content-center">
                                     <GearSlot slot="legs" item={gear.legs} onClick={() => setActiveSlot("legs")} onClear={clearSlot} />
                                 </Col>
                             </Row>
+
+                            {/* Row 5: Hands, Feet, Ring */}
                             <Row className="mb-2">
-                                {/* gear slots row 5 */}
                                 <Col className="d-flex justify-content-center">
                                     <GearSlot slot="hands" item={gear.hands} onClick={() => setActiveSlot("hands")} onClear={clearSlot} />
                                 </Col>
@@ -132,12 +155,16 @@ function GearPlanner() {
                             </Row>
                         </Container>
                     </Col>
+
+                    {/* Right column: Item list for active slot */}
                     <Col md={4} sx={12} style={{ height: "360px", overflowY: "auto" }}>
                         <ItemList slot={activeSlot} items={items || []} loading={loading} error={error} onItemClick={handleItemSelect} />
                     </Col>
-                    {/*list of slot items to be selected from shown here in this col*/}
                 </Row>
+
                 <hr />
+
+                {/* Stats summary and save button section */}
                 <Row className="mt-3">
                     <Col md={8}>
                         <GearStatsSummary
