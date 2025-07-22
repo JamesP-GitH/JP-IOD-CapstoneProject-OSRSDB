@@ -1,3 +1,4 @@
+// --- Standard Spellbook Spells ---
 const standardSpellbook = [
     { name: "Wind Strike", damage: 8 },
     { name: "Water Strike", damage: 8 },
@@ -26,6 +27,7 @@ const standardSpellbook = [
     { name: "Fire Surge", damage: 24 },
 ];
 
+// --- Ancient Magicks ---
 const ancientMagicks = [
     { name: "Smoke Rush", damage: 13 },
     { name: "Shadow Rush", damage: 14 },
@@ -45,6 +47,7 @@ const ancientMagicks = [
     { name: "Ice Barrage", damage: 30 },
 ];
 
+// --- Arceuus Spellbook ---
 const arceuusSpellbook = [
     { name: "Ghostly Grasp", damage: 12 },
     { name: "Skeletal Grasp", damage: 17 },
@@ -53,8 +56,11 @@ const arceuusSpellbook = [
     { name: "Superior Demonbane", damage: 23 },
     { name: "Dark Demonbane", damage: 30 },
 ];
+
+// Combine all spellbooks into a single list for easy access
 export const allSpells = [...standardSpellbook, ...ancientMagicks, ...arceuusSpellbook];
 
+// Returns the base max hit (damage) of a spell given its name.
 export function getSpellDamage(spellName) {
     const match = allSpells.find((spell) => spell.name === spellName);
     return match ? match.damage : null;
