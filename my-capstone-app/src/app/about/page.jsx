@@ -79,7 +79,11 @@ export default function About() {
                             <CardText>
                                 I'm <strong>James Pagliaccio</strong>, a developer with a passion for building interactive, player-focused
                                 tools. This planner was a deep dive into scalable design and real-time feedback systems, and I'm excited to
-                                expand it over time. Check out more of my work on GitHub!
+                                expand it over time. Check out more of my work on{" "}
+                                <a href="https://github.com/JamesP-GitH" target="_blank" rel="noopener noreferrer">
+                                    GitHub
+                                </a>
+                                !
                             </CardText>
                         </CardBody>
                     </Card>
